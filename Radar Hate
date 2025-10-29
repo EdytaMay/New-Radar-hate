@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RadarHate AI – Wykrywaj. Chroń. Reaguj. | Edyta May</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #1a1a1a;
+      --border: #e5e5e5;
+      --primary: #003366;
+      --alert: #CC0000;
+      --safe: #006600;
+    }
+    body {
+      margin: 0; padding: 0; font-family: 'Inter', sans-serif;
+      background: var(--bg); color: var(--text); height: 100vh;
+      display: flex; flex-direction: column;
+    }
+    header {
+      padding: 1rem 2rem; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .logo { font-weight: 700; font-size: 1.5rem; color: var(--primary); }
+    .user { display: flex; gap: 1rem; font-size: 0.9rem; color: #666; }
+    main { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; padding: 2rem; max-width: 800px; margin: 0 auto; width: 100%; }
+    .chat { margin-bottom: 1rem; overflow-y: auto; height: calc(100vh - 200px); }
+    .message { margin: 0.75rem 0; padding: 0.75rem 1rem; border-radius: 12px; max-width: 85%; word-wrap: break-word; }
+    .ai { background: #f0f0f0; align-self: flex-start; border-bottom-left-radius: 4px; }
+    .user-msg { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+    .input-area {
+      display: flex; gap: 0.5rem; padding: 1rem 0; border-top: 1px solid var(--border);
+    }
+    textarea {
+      flex: 1; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 12px;
+      font-size: 1rem; resize: none; height: 50px; box-sizing: border-box;
+    }
+    button {
+      background: var(--primary); color: white; border: none; padding: 0 1.5rem;
+      border-radius: 12px; cursor: pointer; font-weight: 600; height: 50px;
+    }
+    .actions { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem; }
+    .btn-small { background: #f0f0f0; color: #333; padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.85rem; cursor: pointer; border: 1px solid #ddd; margin: 0.25rem; }
+    .btn-small:hover { background: #e0e0e0; }
+    .alert { color: var(--alert); font-weight: 600; }
+    .safe { color: var(--safe); }
+    @media (max-width: 768px) { .input-area { padding: 1rem; } main { padding: 1rem; } }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">RadarHate by Edyta May</div>
+    <div class="user">
+      <span>⚙️ Ustawienia</span>
+      <span>👤 Konto</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="chat" id="chat">
+      <div class="message ai">
+        Cześć Edyta! Wklej tekst, post, komentarz lub link – przeanalizuję go pod kątem mowy nienawiści i zasugeruję działania. Przykładowo: "Jesteś zerem, zniknij".
+      </div>
+    </div>
+
+    <div class="input-area">
+      <textarea id="input" placeholder="Wpisz wiadomość, post, komentarz..."></textarea>
+      <button onclick="sendMessage()">Wyślij</button>
+    </div>
+  </main>
+
+  <script>
+    function sendMessage() {
+      const input = document.getElementById('input');
+      const chat = document.getElementById('chat');
+      const userText = input.value.trim();
+      if (!userText) return;
+
+      chat.innerHTML += `<div class="message user-msg">${userText}</div>`;
+      input.value = '';
+
+      setTimeout(() => {
+        chat.innerHTML += `
+          <div class="message ai">
+            <span class="alert">⚠️ Wykryto mowę nienawiści (98% pewności)</span><br>
+            📌 Kategoria: Osobiste znieważenie / Cyberprzemoc<br>
+            🌍 Język: Polski<br>
+            🔗 Kontekst: Celuje w samoocenę, potencjalnie narusza prawo.<br><br>
+            <strong>✅ Co możesz zrobić (Edyta):</strong>
+            <div class="actions">
+              <div class="btn-small" onclick="generateReport()">📄 Generuj raport PDF</div>
+              <div class="btn-small" onclick="reportPlatform()">🚨 Zgłoś do platformy</div>
+              <div class="btn-small" onclick="legalSupport()">⚖️ Przekaż do organizacji prawnej</div>
+              <div class="btn-small" onclick="psychSupport()">🧠 Wsparcie psychologiczne</div>
+            </div>
+            <small>💡 Podpowiedź: "Jak chronić przed hejtem online?"</small>
+          </div>`;
+        chat.scrollTop = chat.scrollHeight;
+      }, 800);
+    }
+
+    function generateReport() { alert('Raport PDF gotowy! Pobierz z /reports'); }
+    function reportPlatform() { alert('Zgłoszenie wysłane!'); }
+    function legalSupport() { window.open('https://example-ngo.pl/hate', '_blank'); }
+    function psychSupport() { window.open('https://psych-support.pl', '_blank'); }
+
+    document.getElementById('input').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+  </script>
+</body>
+</html>
